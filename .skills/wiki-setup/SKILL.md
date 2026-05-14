@@ -35,7 +35,23 @@ If `.env` doesn't exist, create it from `.env.example`. Ask the user for:
    - If unsure, skip for now — both skills fall back to `Grep` automatically.
    - Install instructions: see `.env.example` (QMD section).
 
-## Step 2: Create Vault Directory Structure
+## Step 2: Copy Skills into Vault
+
+If skills are not already present in the vault, copy them from the repo:
+
+```bash
+REPO_SKILLS="${OBSIDIAN_WIKI_REPO:-.}/.skills"
+VAULT_SKILLS="$OBSIDIAN_VAULT_PATH/.agents/skills"
+mkdir -p "$VAULT_SKILLS"
+rm -rf "$VAULT_SKILLS"/*
+for skill in "$REPO_SKILLS"/*/; do
+  cp -r "$skill" "$VAULT_SKILLS/$(basename "$skill")"
+done
+```
+
+This makes the vault self-contained. The agent can discover skills directly from the vault.
+
+## Step 3: Create Vault Directory Structure
 
 ```bash
 mkdir -p "$OBSIDIAN_VAULT_PATH"/{concepts,entities,skills,references,synthesis,journal,projects,_archives,_raw,.obsidian}
@@ -46,7 +62,7 @@ mkdir -p "$OBSIDIAN_VAULT_PATH"/{concepts,entities,skills,references,synthesis,j
 - `_archives/` — Stores wiki snapshots for rebuild/restore operations.
 - `_raw/` — Staging area for unprocessed drafts. Drop rough notes here; `wiki-ingest` will promote them to proper wiki pages and delete the originals.
 
-## Step 3: Create Special Files
+## Step 4: Create Special Files
 
 ### index.md
 
@@ -115,7 +131,7 @@ updated: TIMESTAMP
 *None yet.*
 ```
 
-## Step 4: Create .obsidian Configuration
+## Step 5: Create .obsidian Configuration
 
 Create minimal Obsidian config for a good out-of-box experience:
 
@@ -136,7 +152,7 @@ Create minimal Obsidian config for a good out-of-box experience:
 }
 ```
 
-## Step 5: Recommend Obsidian Plugins
+## Step 6: Recommend Obsidian Plugins
 
 Tell the user about these recommended community plugins (they install manually):
 
@@ -145,7 +161,7 @@ Tell the user about these recommended community plugins (they install manually):
 3. **Templater** — If they want to create pages manually using templates.
 4. **Obsidian Git** — Auto-backup the vault to a git repo.
 
-## Step 6: Verify Setup
+## Step 7: Verify Setup
 
 Run a quick sanity check:
 - [ ] Vault directory exists with: `concepts/`, `entities/`, `skills/`, `references/`, `synthesis/`, `journal/`, `projects/`, `_archives/`, `_raw/`

@@ -369,12 +369,12 @@ Every write skill reads `OBSIDIAN_LINK_FORMAT` from config before generating lin
 
 ## Config Resolution Protocol
 
-**All skills must resolve config using this algorithm — do not hard-code `.env` or `~/.obsidian-wiki/config` directly.** This ensures single-vault, multi-vault, project-local, and VPS setups all work correctly.
+**All skills must resolve config using this algorithm — do not hard-code `.env` directly.** This ensures single-vault, project-local, and VPS setups all work correctly.
 
 ### Resolution order
 
 1. **Walk up from CWD** — look for a `.env` file in the current directory, then each parent, up to `$HOME`. Stop at the first `.env` that contains `OBSIDIAN_VAULT_PATH`.
-2. **Global config** — if no local `.env` found, read `~/.obsidian-wiki/config`.
+2. **Auto-detect from skill path** — if skills are being read from inside a vault (e.g. `$VAULT/.agents/skills/`), walk up from the skill directory to find the vault root (look for `index.md` + `.manifest.json`).
 3. **Prompt setup** — if neither exists, tell the user: "No config found. Run `wiki-setup` to initialize your wiki."
 
 ```
@@ -384,25 +384,29 @@ find_config() {
     [[ -f "$dir/.env" ]] && grep -q "OBSIDIAN_VAULT_PATH" "$dir/.env" && { echo "$dir/.env"; return; }
     dir="$(dirname "$dir")"
   done
-  [[ -f "$HOME/.obsidian-wiki/config" ]] && { echo "$HOME/.obsidian-wiki/config"; return; }
+  # If reading skills from inside a vault, infer vault from skill path
+  SKILL_DIR="${BASH_SOURCE[0]%/*}"
+  while [[ "$SKILL_DIR" != "$HOME" && "$SKILL_DIR" != "/" ]]; do
+    [[ -f "$SKILL_DIR/index.md" && -f "$SKILL_DIR/.manifest.json" ]] && { echo "$SKILL_DIR"; return; }
+    SKILL_DIR="$(dirname "$SKILL_DIR")"
+  done
   echo ""
 }
 ```
 
 ### Vault-scoped state
 
-Skills that write runtime state (e.g. `daily-update`) must scope that state to the resolved vault, not to a global path. Use:
+Skills that write runtime state (e.g. `daily-update`) must scope that state to the resolved vault, not to a global path. Store state inside the vault:
 
 ```
-VAULT_ID=$(echo "$OBSIDIAN_VAULT_PATH" | md5sum 2>/dev/null || md5 -q - <<< "$OBSIDIAN_VAULT_PATH" | cut -c1-8)
-STATE_DIR="$HOME/.obsidian-wiki/state/$VAULT_ID"
+STATE_DIR="$OBSIDIAN_VAULT_PATH/.agents/state"
 ```
 
 ### Standard "Before You Start" block
 
 Every skill's setup section should read:
 
-> **Resolve config** — follow the Config Resolution Protocol in `llm-wiki/SKILL.md`. Walk up from CWD for `.env`, fall back to `~/.obsidian-wiki/config`, else prompt setup. This gives `OBSIDIAN_VAULT_PATH` and any tool-specific path overrides.
+> **Resolve config** — follow the Config Resolution Protocol in `llm-wiki/SKILL.md`. Walk up from CWD for `.env`, auto-detect from skill path if inside a vault, else prompt setup. This gives `OBSIDIAN_VAULT_PATH` and any tool-specific path overrides.
 
 ## Environment Variables
 

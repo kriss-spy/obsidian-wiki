@@ -1,7 +1,5 @@
 # obsidian-wiki
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Ar9av/obsidian-wiki)
-
 <p align="center">
   <img width="460" height="307" alt="obsidian-wiki" src="https://github.com/user-attachments/assets/37f5586f-67f8-4078-9dbc-28e277287cf2" />
 </p>
@@ -14,25 +12,13 @@ We took that and built a framework around it. The whole thing is a set of markdo
 
 ## Quick Start
 
-### Install via Skills CLI (recommended)
-
 ```bash
-npx skills add Ar9av/obsidian-wiki
-```
-
-This installs all wiki skills into your current agent (Claude Code, Cursor, Codex, etc.). Then open your agent and say **"set up my wiki"**.
-
-Browse the full skill list at [skills.sh/ar9av/obsidian-wiki](https://skills.sh/ar9av/obsidian-wiki).
-
-### Install via git clone
-
-```bash
-git clone https://github.com/Ar9av/obsidian-wiki.git
+git clone https://github.com/kriss-spy/obsidian-wiki.git
 cd obsidian-wiki
 bash setup.sh
 ```
 
-`setup.sh` asks for your vault path, writes the config to `~/.obsidian-wiki/config`, symlinks skills into all your agents, and installs `wiki-update` globally so you can use it from any project.
+`setup.sh` asks for your vault path, creates the vault directory structure, and copies skills into `your-vault/.agents/skills/`. Nothing is written outside the repo and the vault you designate.
 
 `OBSIDIAN_VAULT_PATH` is just any directory where you want your wiki documents to live. It can be a new empty folder or an existing Obsidian vault. Obsidian will read from it directly.
 
@@ -40,127 +26,30 @@ Open the project in your agent and say **"set up my wiki"**. That's it.
 
 ## Agent Compatibility
 
-Works with **any AI coding agent** that can read files — Claude Code, Cursor, Windsurf, Codex, Gemini CLI, Kiro, and more. `setup.sh` handles skill discovery for each one automatically.
+Works with **any AI coding agent** that can read files — Claude Code, Cursor, Windsurf, Codex, Gemini CLI, Kiro, and more. Skills are plain markdown files; the agent reads them directly.
 
-<details>
-<summary><b>Supported agents and manual setup instructions</b></summary>
+When you open the obsidian-wiki repo in your agent, it picks up context from the bootstrap files (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, etc.) and discovers skills from `.skills/`. When you open your vault in Obsidian, skills are also available at `.agents/skills/` inside the vault.
 
-| Agent | Bootstrap | Skills Directory | Slash Commands |
-|---|---|---|---|
-| **[Claude Code](https://claude.ai/code)** | `CLAUDE.md` | `.claude/skills/` + `~/.claude/skills/` | ✅ `/wiki-ingest`, `/wiki-status`, etc. |
-| **[Cursor](https://cursor.com)** | `.cursor/rules/obsidian-wiki.mdc` | `.cursor/skills/` | ✅ `/wiki-ingest`, `/wiki-status`, etc. |
-| **[Windsurf](https://windsurf.com)** | `.windsurf/rules/obsidian-wiki.md` | `.windsurf/skills/` | ✅ via Cascade |
-| **[Codex (OpenAI)](https://openai.com/codex)** | `AGENTS.md` | `~/.codex/skills/` | `$wiki-ingest` (Codex uses `$`) |
-| **[Gemini CLI](https://github.com/google-gemini/gemini-cli)** | `GEMINI.md` | `~/.gemini/skills/` | ✅ `/wiki-ingest`, `/wiki-query`, etc. |
-| **[Google Antigravity](https://antigravity.google)** | `.agent/rules/` + `.agent/workflows/` | `.agents/skills/` | ✅ via workflows registry |
-| **[Kiro IDE/CLI](https://kiro.dev)** | `.kiro/steering/obsidian-wiki.md` | `.kiro/skills/` + `~/.kiro/skills/` | ✅ `/wiki-ingest`, `/wiki-status`, etc. |
-| **[Hermes](https://hermes-agent.nousresearch.com)** | `.hermes.md` | `~/.hermes/skills/` | ✅ `/wiki-history-ingest hermes`, etc. |
-| **[OpenClaw](https://openclaw.ai)** | `AGENTS.md` | `~/.openclaw/skills/` + `~/.agents/skills/` | ✅ `/wiki-ingest`, `/wiki-history-ingest openclaw`, etc. |
-| **[OpenCode](https://opencode.ai)** | `AGENTS.md` | `~/.agents/skills/` | ✅ `/wiki-ingest`, `/wiki-query`, etc. |
-| **[Aider](https://aider.chat)** | `AGENTS.md` | `~/.agents/skills/` | Describe intent in chat |
-| **[Factory Droid](https://factory.ai)** | `AGENTS.md` | `~/.agents/skills/` | ✅ `/wiki-ingest`, `/wiki-query`, etc. |
-| **[Trae](https://trae.ai)** / **Trae CN** | `AGENTS.md` | `~/.trae/skills/` / `~/.trae-cn/skills/` | ✅ via Agent tool |
-| **GitHub Copilot (VS Code)** | `.github/copilot-instructions.md` | — | Describe intent in chat |
-| **GitHub Copilot (CLI)** | — | `~/.copilot/skills/` | ✅ `/wiki-ingest`, `/wiki-query`, etc. |
-| **[Kilocode](https://kilo.ai/)** | `AGENTS.md` / `CLAUDE.md` | `.agents/skills/` + `.claude/skills/` | ✅ `/wiki-ingest`, `/wiki-status`, etc. |
+| Agent | Bootstrap File | How to invoke |
+|---|---|---|
+| **[Claude Code](https://claude.ai/code)** | `CLAUDE.md` | Open repo, say "set up my wiki" |
+| **[Cursor](https://cursor.com)** | `.cursor/rules/obsidian-wiki.mdc` | Open repo, type `/wiki-setup` |
+| **[Windsurf](https://windsurf.com)** | `.windsurf/rules/obsidian-wiki.md` | Open repo, tell Cascade "set up my wiki" |
+| **[Codex (OpenAI)](https://openai.com/codex)** | `AGENTS.md` | `cd repo && codex "set up my wiki"` |
+| **[Gemini CLI](https://github.com/google-gemini/gemini-cli)** | `GEMINI.md` | `cd repo && gemini "set up my wiki"` |
+| **[Google Antigravity](https://antigravity.google)** | `.agent/rules/` + `.agent/workflows/` | Open repo |
+| **[Kiro IDE/CLI](https://kiro.dev)** | `.kiro/steering/obsidian-wiki.md` | Open repo, `/wiki-ingest`, etc. |
+| **[Hermes](https://hermes-agent.nousresearch.com)** | `.hermes.md` | `cd repo && hermes "set up my wiki"` |
+| **[OpenClaw](https://openclaw.ai)** | `AGENTS.md` | `cd repo && openclaw "set up my wiki"` |
+| **[OpenCode](https://opencode.ai)** | `AGENTS.md` | Open repo, `/wiki-ingest`, etc. |
+| **[Aider](https://aider.chat)** | `AGENTS.md` | Open repo, describe intent |
+| **[Factory Droid](https://factory.ai)** | `AGENTS.md` | Open repo |
+| **[Trae](https://trae.ai)** / **Trae CN** | `AGENTS.md` | Open repo |
+| **GitHub Copilot (VS Code)** | `.github/copilot-instructions.md` | Say "set up my wiki" in chat |
+| **GitHub Copilot (CLI)** | — | Copy `.skills/*` to `~/.copilot/skills/` manually |
+| **[Kilocode](https://kilo.ai/)** | `AGENTS.md` / `CLAUDE.md` | Open repo |
 
-> Each agent has its own convention for discovering skills. `setup.sh` symlinks the canonical `.skills/` directory into each agent's expected location. You write skills once, every agent can use them.
-
-### Manual setup (if you prefer `setup.sh`)
-
-<details>
-<summary>Claude Code</summary>
-
-Skills are auto-discovered from `.claude/skills/`. Either run `setup.sh` or copy `.skills/*` to `.claude/skills/`. The `CLAUDE.md` file at the repo root is automatically loaded as project context.
-
-```bash
-cd /path/to/obsidian-wiki && claude "set up my wiki"
-```
-</details>
-
-<details>
-<summary>Cursor</summary>
-
-Skills are auto-discovered from `.cursor/skills/`. The `.cursor/rules/obsidian-wiki.mdc` file provides always-on context. Either run `setup.sh` or copy `.skills/*` to `.cursor/skills/`. Then type `/wiki-setup` in the chat.
-</details>
-
-<details>
-<summary>Windsurf</summary>
-
-Cascade reads rules from `.windsurf/rules/` and skills from `.windsurf/skills/`. Either run `setup.sh` or copy `.skills/*` to `.windsurf/skills/`. Then tell Cascade: "set up my wiki".
-</details>
-
-<details>
-<summary>Codex</summary>
-
-Reads `AGENTS.md` for project context. `setup.sh` installs skills globally to `~/.codex/skills/`. Either run `setup.sh` or manually symlink `.skills/*` to `~/.codex/skills/`.
-
-```bash
-cd /path/to/obsidian-wiki && codex "set up my wiki"
-```
-</details>
-
-<details>
-<summary>Gemini CLI</summary>
-
-Reads `GEMINI.md` and discovers global skills from `~/.gemini/skills/`. Either run `setup.sh` or manually symlink `.skills/*` to `~/.gemini/skills/`.
-
-```bash
-cd /path/to/obsidian-wiki && gemini "set up my wiki"
-```
-</details>
-
-<details>
-<summary>Google Antigravity</summary>
-
-Always-on via `.agent/rules/` + `.agent/workflows/`. `setup.sh` ships both files and symlinks skills into `.agents/skills/`. The legacy `~/.gemini/antigravity/skills/` path is also wired.
-</details>
-
-<details>
-<summary>Kiro IDE/CLI</summary>
-
-Always-on via `.kiro/steering/*.md` with `inclusion: always`. `setup.sh` symlinks `.skills/*` into both `.kiro/skills/` and `~/.kiro/skills/`. Invoke with `/wiki-ingest`, `/wiki-query`, etc.
-</details>
-
-<details>
-<summary>OpenCode / Aider / Factory Droid / Trae</summary>
-
-All read `AGENTS.md` at the repo root. `setup.sh` symlinks skills into `~/.agents/skills/` (shared discovery path). Trae also gets `~/.trae/skills/` and `~/.trae-cn/skills/`.
-</details>
-
-<details>
-<summary>Hermes</summary>
-
-Reads `.hermes.md` first, then falls back to `AGENTS.md`. Skills discovered from `~/.hermes/skills/`. Run `setup.sh` or manually symlink `.skills/*` there.
-
-```bash
-cd /path/to/obsidian-wiki && hermes "set up my wiki"
-# Mine Hermes history into the wiki:
-/wiki-history-ingest hermes
-```
-</details>
-
-<details>
-<summary>OpenClaw</summary>
-
-Reads `AGENTS.md` (priority 10). Discovers skills from `~/.openclaw/skills/` and `~/.agents/skills/`. Skills auto-register as slash commands.
-
-```bash
-cd /path/to/obsidian-wiki && openclaw "set up my wiki"
-# Mine OpenClaw history:
-/wiki-history-ingest openclaw
-```
-</details>
-
-<details>
-<summary>GitHub Copilot</summary>
-
-**VS Code Chat:** reads `.github/copilot-instructions.md`. Say "set up my wiki" in Copilot Chat.
-
-**CLI:** discovers skills from `~/.copilot/skills/`. Run `setup.sh` or manually symlink `.skills/*` there.
-</details>
-
-</details>
+> If your agent requires skills in a specific directory (e.g. `~/.claude/skills/`), copy or symlink from `.skills/` manually. `setup.sh` intentionally does not touch global agent paths.
 
 ## How it works
 
@@ -324,88 +213,63 @@ After installing, your agent will automatically pick up the new skills alongside
 ## Project Structure
 
 ```
-obsidian-wiki/
-├── .skills/                          # ← Canonical skill definitions (source of truth)
+obsidian-wiki/                          # ← This repo
+├── .skills/                            # ← Canonical skill definitions (source of truth)
 │   ├── wiki-setup/SKILL.md
 │   ├── wiki-ingest/SKILL.md
-│   ├── wiki-history-ingest/SKILL.md
-│   ├── claude-history-ingest/SKILL.md
-│   ├── codex-history-ingest/SKILL.md
-│   ├── hermes-history-ingest/SKILL.md
-│   ├── openclaw-history-ingest/SKILL.md
-│   ├── data-ingest/SKILL.md
-│   ├── wiki-status/SKILL.md
-│   ├── wiki-rebuild/SKILL.md
 │   ├── wiki-query/SKILL.md
-│   ├── wiki-lint/SKILL.md
-│   ├── cross-linker/SKILL.md
-│   ├── tag-taxonomy/SKILL.md
-│   ├── wiki-update/SKILL.md
-│   ├── llm-wiki/SKILL.md
-│   ├── wiki-export/SKILL.md
-│   └── skill-creator/SKILL.md
+│   └── ... (30+ skills)
 │
-├── CLAUDE.md                            # Bootstrap → Claude Code / Kilocode (→ AGENTS.md)
-├── GEMINI.md                            # Bootstrap → Gemini CLI (→ AGENTS.md)
-├── AGENTS.md                            # Bootstrap → Codex, OpenCode, Aider, Droid, Trae, Hermes, OpenClaw, Kilocode
-├── .hermes.md                           # Bootstrap → Hermes (symlink → AGENTS.md)
-├── .cursor/rules/obsidian-wiki.mdc      # Always-on → Cursor (alwaysApply: true)
-├── .windsurf/rules/obsidian-wiki.md     # Always-on → Windsurf
-├── .kiro/steering/obsidian-wiki.md      # Always-on → Kiro (inclusion: always)
-├── .agent/rules/obsidian-wiki.md        # Always-on → Google Antigravity
-├── .agent/workflows/obsidian-wiki.md    # Slash-command registry → Google Antigravity
-├── .github/copilot-instructions.md      # Always-on → GitHub Copilot (VS Code Chat)
+├── CLAUDE.md                           # Bootstrap → Claude Code / Kilocode
+├── GEMINI.md                           # Bootstrap → Gemini CLI
+├── AGENTS.md                           # Bootstrap → Codex, OpenCode, Aider, Droid, Trae, Hermes, OpenClaw
+├── .hermes.md                          # Bootstrap → Hermes (symlink → AGENTS.md)
+├── .cursor/rules/obsidian-wiki.mdc     # Always-on → Cursor
+├── .windsurf/rules/obsidian-wiki.md    # Always-on → Windsurf
+├── .kiro/steering/obsidian-wiki.md     # Always-on → Kiro
+├── .agent/rules/obsidian-wiki.md       # Always-on → Google Antigravity
+├── .agent/workflows/obsidian-wiki.md   # Slash-command registry → Google Antigravity
+├── .github/copilot-instructions.md     # Always-on → GitHub Copilot (VS Code Chat)
 │
-├── .claude/skills/   → symlinks to .skills/*  (created by setup.sh)
-├── .cursor/skills/   → symlinks to .skills/*  (created by setup.sh)
-├── .windsurf/skills/ → symlinks to .skills/*  (created by setup.sh)
-├── .agents/skills/   → symlinks to .skills/*  (created by setup.sh)
-├── .kiro/skills/     → symlinks to .skills/*  (created by setup.sh)
-│
-├── ~/.claude/skills/              → portable skills (wiki-update, wiki-query)
-├── ~/.gemini/skills/              → global symlinks — Gemini CLI
-├── ~/.gemini/antigravity/skills/  → global symlinks — Antigravity (legacy path)
-├── ~/.codex/skills/               → global symlinks — Codex
-├── ~/.hermes/skills/              → global symlinks — Hermes
-├── ~/.openclaw/skills/            → global symlinks — OpenClaw (managed)
-├── ~/.copilot/skills/             → global symlinks — GitHub Copilot CLI
-├── ~/.trae/skills/                → global symlinks — Trae
-├── ~/.trae-cn/skills/             → global symlinks — Trae CN
-├── ~/.kiro/skills/                → global symlinks — Kiro CLI
-├── ~/.agents/skills/              → global symlinks — OpenCode, Aider, Droid, generic
-│
-├── setup.sh                          # One-command agent setup
-├── .env.example                      # Configuration template
-├── README.md                         # You are here
-└── SETUP.md                          # Detailed setup guide
+├── setup.sh                            # Creates vault, copies skills in
+├── .env.example                        # Configuration template
+├── README.md                           # You are here
+└── SETUP.md                            # Detailed setup guide
+
+your-vault/                             # ← Created by setup.sh
+├── .agents/skills/                     # ← Copied from .skills/ (self-contained)
+├── .obsidian/                          # Obsidian config
+├── concepts/                           # Global knowledge
+├── entities/                           # People, tools, libraries
+├── skills/                             # How-to knowledge
+├── references/                         # Source summaries
+├── synthesis/                          # Cross-cutting analysis
+├── journal/                            # Timestamped logs
+├── projects/                           # Per-project knowledge
+├── _archives/                          # Wiki snapshots
+├── _raw/                               # Staging area
+├── index.md                            # Auto-maintained catalog
+├── log.md                              # Chronological operation log
+├── hot.md                              # ~500-word recent activity snapshot
+└── .manifest.json                      # Ingest tracking ledger
 ```
 
 ## Using from other projects
 
-The whole point is that your wiki should stay up to date as you work across different codebases. You don't want to come back to the obsidian-wiki repo every time. So `setup.sh` installs two global skills that work from any project: `wiki-update` and `wiki-query`.
+The whole point is that your wiki should stay up to date as you work across different codebases. You don't want to come back to the obsidian-wiki repo every time. Two skills handle this cross-project workflow: `wiki-update` and `wiki-query`.
 
-When you run `bash setup.sh`, it does the following:
+When you run `bash setup.sh`, it copies all skills into your vault at `.agents/skills/`. The vault is now self-contained.
 
-1. Writes a config to `~/.obsidian-wiki/config` with your vault path and the repo location. This is how the skills know where to read and write.
-2. Symlinks `wiki-update` and `wiki-query` into `~/.claude/skills/` so they're available everywhere in Claude Code.
-3. Symlinks all skills into every agent's global discovery path:
-   - `~/.gemini/skills/` — Gemini CLI (canonical)
-   - `~/.gemini/antigravity/skills/` — Google Antigravity (legacy)
-   - `~/.codex/skills/` — Codex
-   - `~/.hermes/skills/` — Hermes
-   - `~/.openclaw/skills/` — OpenClaw (managed)
-   - `~/.copilot/skills/` — GitHub Copilot CLI
-   - `~/.trae/skills/` + `~/.trae-cn/skills/` — Trae / Trae CN
-   - `~/.kiro/skills/` — Kiro CLI
-   - `~/.agents/skills/` — OpenCode, Aider, Factory Droid, and other AGENTS.md-aware agents
-
-After that, you're in some project, say `~/projects/my-cool-app`, working with Claude. Two commands:
+To use `wiki-update` and `wiki-query` from another project, put `OBSIDIAN_VAULT_PATH` in that project's `.env` (or in `~/.env` for a global default):
 
 ```bash
-# You're working on some project
-cd ~/projects/my-cool-app
-claude
+# In ~/projects/my-cool-app/.env
+OBSIDIAN_VAULT_PATH=/path/to/your/vault
+```
 
+Then from any project:
+
+```bash
 # Write to the wiki: distill what you've learned
 > /wiki-update
 
@@ -427,7 +291,7 @@ This is early. The skills work but there's a lot of room to make them smarter �
 
 1. Create a folder in `.skills/your-skill-name/`
 2. Add a `SKILL.md` with YAML frontmatter (`name`, `description`) and markdown instructions
-3. Run `bash setup.sh` to symlink into all agent directories
+3. Run `bash setup.sh` to copy the updated skills into your vault
 4. Test with your agent by saying something that matches the description
 
 See `.skills/skill-creator/SKILL.md` for the full guide on writing effective skills.

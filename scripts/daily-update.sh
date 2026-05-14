@@ -7,8 +7,7 @@ set -euo pipefail
 #
 # Config resolution order (mirrors llm-wiki/SKILL.md protocol):
 #   1. Walk up from CWD looking for .env with OBSIDIAN_VAULT_PATH
-#   2. Fall back to ~/.obsidian-wiki/config
-#   3. Exit with error if neither found
+#   2. Exit with error if not found
 
 _find_config() {
   local dir="$PWD"
@@ -19,10 +18,6 @@ _find_config() {
     fi
     dir="$(dirname "$dir")"
   done
-  if [[ -f "$HOME/.obsidian-wiki/config" ]]; then
-    echo "$HOME/.obsidian-wiki/config"
-    return
-  fi
   echo ""
 }
 
@@ -41,11 +36,8 @@ if [[ -z "${OBSIDIAN_VAULT_PATH:-}" ]]; then
   exit 1
 fi
 
-# Vault-scoped state dir (supports multiple vaults independently)
-VAULT_ID=$(echo "$OBSIDIAN_VAULT_PATH" | md5sum 2>/dev/null | cut -c1-8 || \
-           md5 -q - <<< "$OBSIDIAN_VAULT_PATH" 2>/dev/null | cut -c1-8 || \
-           echo "default")
-STATE_DIR="$HOME/.obsidian-wiki/state/$VAULT_ID"
+# Vault-scoped state dir (self-contained, no global paths)
+STATE_DIR="$OBSIDIAN_VAULT_PATH/.agents/state"
 mkdir -p "$STATE_DIR"
 
 # Write vault path so wiki-notify.sh can find this state dir

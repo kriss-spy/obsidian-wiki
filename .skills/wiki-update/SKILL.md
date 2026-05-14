@@ -13,7 +13,7 @@ You are distilling knowledge from the current project into the user's Obsidian w
 
 ## Before You Start
 
-1. **Resolve config** — follow the Config Resolution Protocol in `llm-wiki/SKILL.md` (walk up CWD for `.env` → `~/.obsidian-wiki/config` → prompt setup). This gives `OBSIDIAN_VAULT_PATH`, `OBSIDIAN_WIKI_REPO`, and `OBSIDIAN_LINK_FORMAT` (`wikilink` default or `markdown`). Works from any project directory.
+1. **Resolve config** — follow the Config Resolution Protocol in `llm-wiki/SKILL.md` (walk up CWD for `.env`, auto-detect from skill path if inside a vault, else prompt setup). This gives `OBSIDIAN_VAULT_PATH`, `OBSIDIAN_WIKI_REPO`, and `OBSIDIAN_LINK_FORMAT` (`wikilink` default or `markdown`). Works from any project directory.
 3. Read `$OBSIDIAN_VAULT_PATH/.manifest.json` to check if this project has been synced before.
 4. Read `$OBSIDIAN_VAULT_PATH/index.md` to know what the wiki already contains.
 

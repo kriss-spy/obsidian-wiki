@@ -2,23 +2,19 @@
 
 A skill-based framework for AI coding agents — Claude Code, Cursor, Windsurf, Gemini CLI, Google Antigravity, Codex, Hermes, OpenClaw, OpenCode, Aider, Factory Droid, Trae / Trae CN, Kiro, GitHub Copilot (CLI + VS Code Chat) — to build and maintain an Obsidian wiki using Karpathy's LLM Wiki pattern. No scripts, no API keys — the agent **is** the LLM.
 
-> Running `bash setup.sh` wires up every supported agent: project-local skill symlinks (`.claude/skills/`, `.cursor/skills/`, `.windsurf/skills/`, `.agents/skills/`, `.kiro/skills/`), global symlinks (`~/.claude/skills/`, `~/.gemini/skills/`, `~/.codex/skills/`, `~/.hermes/skills/`, `~/.openclaw/skills/`, `~/.copilot/skills/`, `~/.trae/skills/`, `~/.trae-cn/skills/`, `~/.kiro/skills/`, `~/.agents/skills/`), and always-on rule files (`CLAUDE.md`, `GEMINI.md`, `AGENTS.md`, `.hermes.md`, `.cursor/rules/…`, `.windsurf/rules/…`, `.kiro/steering/…`, `.agent/rules/…`, `.agent/workflows/…`, `.github/copilot-instructions.md`). See the [Agent Compatibility table in README.md](README.md#agent-compatibility) for the full matrix.
+> Running `bash setup.sh` creates your vault, copies skills into it, and bootstraps repo-local agent context files (`CLAUDE.md`, `GEMINI.md`, `AGENTS.md`, `.hermes.md`, `.cursor/rules/…`, `.windsurf/rules/…`, `.kiro/steering/…`, `.agent/rules/…`, `.agent/workflows/…`, `.github/copilot-instructions.md`). Nothing is written outside the repo or the vault you designate. See the [Agent Compatibility table in README.md](README.md#agent-compatibility) for the full matrix.
 
 ## Quick Start
 
-### 1. Set your vault path
+### 1. Run setup
 
 ```bash
-cp .env.example .env
+git clone https://github.com/kriss-spy/obsidian-wiki.git
+cd obsidian-wiki
+bash setup.sh
 ```
 
-Open `.env` and set `OBSIDIAN_VAULT_PATH` to your Obsidian vault:
-
-```
-OBSIDIAN_VAULT_PATH=/path/to/your/vault
-```
-
-That's the only required config.
+`setup.sh` asks for your vault path, creates the directory structure, and copies all skills into `your-vault/.agents/skills/`. It also creates `.env` if it doesn't exist.
 
 ### 2. Point an agent at the skills
 
@@ -87,23 +83,28 @@ Archives live at `$VAULT/_archives/` with full snapshots. Nothing is ever lost.
 
 ```
 $OBSIDIAN_VAULT_PATH/
-├── concepts/           # Global knowledge — ideas, theories, mental models
-├── entities/           # People, orgs, tools
-├── skills/             # How-to knowledge, procedures
-├── references/         # Source summaries
-├── synthesis/          # Cross-cutting analysis
-├── journal/            # Timestamped logs
-├── projects/           # Per-project knowledge
+├── .agents/
+│   └── skills/           # Copied from repo — self-contained
+├── .obsidian/            # Obsidian config
+├── concepts/             # Global knowledge — ideas, theories, mental models
+├── entities/             # People, orgs, tools
+├── skills/               # How-to knowledge, procedures
+├── references/           # Source summaries
+├── synthesis/            # Cross-cutting analysis
+├── journal/              # Timestamped logs
+├── projects/             # Per-project knowledge
 │   ├── my-project/
-│   │   ├── _project.md
+│   │   ├── my-project.md
 │   │   ├── concepts/
 │   │   └── skills/
 │   └── another-project/
 │       └── ...
-├── _archives/          # Wiki snapshots for rebuild/restore
-├── index.md            # Auto-maintained catalog
-├── log.md              # Chronological operation log
-└── .manifest.json      # Ingest tracking ledger
+├── _archives/            # Wiki snapshots for rebuild/restore
+├── _raw/                 # Staging area for unprocessed drafts
+├── index.md              # Auto-maintained catalog
+├── log.md                # Chronological operation log
+├── hot.md                # ~500-word recent activity snapshot
+└── .manifest.json        # Ingest tracking ledger
 ```
 
 Knowledge that's project-specific goes under `projects/<name>/`. Knowledge that's general goes in the global category directories. Both are cross-referenced with `[[wikilinks]]`.
@@ -141,7 +142,7 @@ Knowledge that's project-specific goes under `projects/<name>/`. Knowledge that'
 
 No scripts, no dependencies. The skills are markdown files that tell an AI agent *how* to operate on your Obsidian vault:
 
-1. Agent reads `.env` for vault path
+1. Agent resolves config (`.env` in CWD or auto-detected from skill path)
 2. Agent reads `.manifest.json` to know what's already been done
 3. Agent reads the relevant skill for instructions
 4. Agent uses its built-in tools (read, write, search) to do the work

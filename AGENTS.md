@@ -7,7 +7,7 @@ A **skill-based framework** for building and maintaining an Obsidian knowledge b
 Resolve config using the Config Resolution Protocol in `llm-wiki/SKILL.md`:
 
 1. **Walk up from CWD** — look for a `.env` file in the current directory, then each parent, up to `$HOME`. Stop at the first `.env` that contains `OBSIDIAN_VAULT_PATH`.
-2. **Global config** — if no local `.env` is found, read `~/.obsidian-wiki/config`.
+2. **Auto-detect from skill path** — if skills are being read from inside a vault (e.g. `$VAULT/.agents/skills/`), walk up from the skill directory to find the vault root (look for `index.md` + `.manifest.json`).
 3. **Prompt setup** — if neither exists, tell the user to run `wiki-setup`.
 
 The resolved config sets `OBSIDIAN_VAULT_PATH` (where the wiki lives). It may also set `OBSIDIAN_WIKI_REPO` (where this repo is cloned) and other optional variables.

@@ -6,19 +6,32 @@
 #   fish:      bass source /path/to/obsidian-wiki/scripts/wiki-notify.sh
 #              (or copy _wiki_notify logic natively using fish syntax)
 #
-# State is vault-scoped under ~/.obsidian-wiki/state/<vault-id>/
+# State is vault-scoped under each vault's .agents/state/ directory.
 # Multiple vaults are supported — all stale vaults are shown.
 
 _wiki_notify() {
-  local state_base="$HOME/.obsidian-wiki/state"
-  [[ -d "$state_base" ]] || return
+  # Find all vault state directories by looking for .agents/state under common vault parent paths.
+  # The user can also set OBSIDIAN_VAULT_PATH explicitly before sourcing this script.
+  local vault_paths=()
 
-  local now age_s age_h stale last vault_path shown=0
+  if [[ -n "${OBSIDIAN_VAULT_PATH:-}" ]]; then
+    vault_paths+=("$OBSIDIAN_VAULT_PATH")
+  fi
 
+  # Also discover from ~/.config/obsidian-wiki/config if it exists (wiki-switch users)
+  if [[ -f "$HOME/.config/obsidian-wiki/config" ]]; then
+    # shellcheck source=/dev/null
+    source "$HOME/.config/obsidian-wiki/config"
+    if [[ -n "${OBSIDIAN_VAULT_PATH:-}" ]]; then
+      vault_paths+=("$OBSIDIAN_VAULT_PATH")
+    fi
+  fi
+
+  local now age_s age_h stale vault_path shown=0
   now=$(date +%s)
 
-  # Iterate over all vault state dirs
-  for state_dir in "$state_base"/*/; do
+  for vault_path in "${vault_paths[@]}"; do
+    local state_dir="$vault_path/.agents/state"
     [[ -f "$state_dir/.last_update" ]] || continue
 
     last=$(cat "$state_dir/.last_update" 2>/dev/null || echo 0)
@@ -29,7 +42,6 @@ _wiki_notify() {
 
     age_h=$(( age_s / 3600 ))
     stale=$(cat "$state_dir/.pending_delta" 2>/dev/null || echo 0)
-    vault_path=$(cat "$state_dir/.vault_path" 2>/dev/null || echo "unknown vault")
 
     echo "┌─ wiki: last synced ${age_h}h ago · ${vault_path##*/}$([ "$stale" -gt 0 ] && echo " · ${stale} source(s) have new content" || echo "")"
     echo "│  /wiki-history-ingest claude   sync Claude sessions"
