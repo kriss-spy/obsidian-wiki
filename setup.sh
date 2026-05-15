@@ -76,7 +76,13 @@ done
 SKILL_COUNT=$(ls -1 "$VAULT_SKILLS_DIR" | wc -l)
 echo "✅  Copied $SKILL_COUNT skills → $VAULT_PATH_EXPANDED/.agents/skills/"
 
-# ── Step 5: Bootstrap repo-local symlinks ─────────────────────
+# ── Step 5: Copy .env into vault ──────────────────────────────
+# The vault must be self-contained. Copy .env so agents can find
+# config when working directly from the vault.
+cp "$SCRIPT_DIR/.env" "$VAULT_PATH_EXPANDED/.env"
+echo "✅  Copied .env → vault root"
+
+# ── Step 6: Bootstrap repo-local symlinks ─────────────────────
 HERMES_BOOTSTRAP="$SCRIPT_DIR/.hermes.md"
 if [ -L "$HERMES_BOOTSTRAP" ]; then
   rm "$HERMES_BOOTSTRAP"
@@ -86,7 +92,7 @@ fi
 ln -s AGENTS.md "$HERMES_BOOTSTRAP"
 echo "✅  .hermes.md → AGENTS.md"
 
-# ── Step 6: Summary ──────────────────────────────────────────
+# ── Step 7: Summary ──────────────────────────────────────────
 echo ""
 echo "───────────────────────────────────────────────────"
 echo " Setup complete!"

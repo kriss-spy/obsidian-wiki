@@ -18,7 +18,7 @@ cd obsidian-wiki
 bash setup.sh
 ```
 
-`setup.sh` asks for your vault path, creates the vault directory structure, and copies skills into `your-vault/.agents/skills/`. Nothing is written outside the repo and the vault you designate.
+`setup.sh` asks for your vault path, creates the vault directory structure, copies skills into `your-vault/.agents/skills/`, and copies `.env` into the vault root. The vault is self-contained — you can delete the repo after setup if you want.
 
 `OBSIDIAN_VAULT_PATH` is just any directory where you want your wiki documents to live. It can be a new empty folder or an existing Obsidian vault. Obsidian will read from it directly.
 

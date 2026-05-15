@@ -14,7 +14,7 @@ cd obsidian-wiki
 bash setup.sh
 ```
 
-`setup.sh` asks for your vault path, creates the directory structure, and copies all skills into `your-vault/.agents/skills/`. It also creates `.env` if it doesn't exist.
+`setup.sh` asks for your vault path, creates the directory structure, copies all skills into `your-vault/.agents/skills/`, and copies `.env` into the vault root. The vault is now self-contained — you can delete the repo after setup if you want.
 
 ### 2. Point an agent at the skills
 
