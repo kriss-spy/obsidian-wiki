@@ -33,7 +33,7 @@ Open this project in your coding agent and tell it what you want:
 | "Audit my wiki" | `wiki-lint` |
 | "Rebuild from scratch" | `wiki-rebuild` |
 
-The agent reads the skills from `.skills/`, reads `.env` for your vault path, and does the work.
+The agent reads the skills from `.agents/skills/`, reads `.env` for your vault path, and does the work.
 
 ### 3. Open in Obsidian
 
@@ -157,4 +157,4 @@ Want a new workflow? Use the `skill-creator` skill:
 
 > "Create a skill that generates weekly summaries from my journal entries"
 
-It walks you through drafting, testing, and refining a new skill in `.skills/`.
+It walks you through drafting, testing, and refining a new skill in `.agents/skills/`.

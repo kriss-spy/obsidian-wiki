@@ -8,7 +8,7 @@
 #   1. Creates .env from .env.example (if not present)
 #   2. Prompts for OBSIDIAN_VAULT_PATH
 #   3. Creates the vault directory structure
-#   4. Copies .skills/* into $VAULT/.agents/skills/
+#   4. Copies .agents/skills/* into $VAULT/.agents/skills/
 #   5. Bootstraps repo-local agent context files (.hermes.md → AGENTS.md)
 #   6. Prints a summary
 #
@@ -17,7 +17,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-SKILLS_DIR="$SCRIPT_DIR/.skills"
+SKILLS_DIR="$SCRIPT_DIR/.agents/skills"
 
 echo ""
 echo "╔══════════════════════════════════════════════════╗"

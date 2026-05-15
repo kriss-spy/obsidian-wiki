@@ -11,7 +11,7 @@ This project is a **skill-based framework** for building and maintaining an Obsi
 
 1. Read `.env` in this repo (or walk up from CWD) for `OBSIDIAN_VAULT_PATH` — this is where the wiki lives.
 2. Read `.manifest.json` at the vault root to see what's already been ingested.
-3. Skills are in `.skills/` (also at `.agents/skills/`). Each subfolder has a `SKILL.md`.
+3. Skills are in `.agents/skills/`. Each subfolder has a `SKILL.md`.
 
 ## When to Use Skills
 

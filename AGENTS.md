@@ -27,6 +27,7 @@ $OBSIDIAN_VAULT_PATH/
 │   └── *.base              # Obsidian Bases dashboard definitions (wiki-dashboard skill)
 ├── _insights.md            # Graph analysis output (hubs, bridges, dead ends)
 ├── _raw/                   # Staging area — drop rough notes here, next ingest promotes them
+│                           # Source documents (PDF conversions, course materials) are preserved; only drafts are removed
 ├── concepts/               # Abstract ideas, patterns, mental models
 ├── entities/               # Concrete things — people, tools, libraries, companies
 ├── skills/                 # How-to knowledge, techniques, procedures
@@ -41,7 +42,7 @@ Every wiki page has required frontmatter: `title`, `category`, `tags`, `sources`
 
 ## Skill Routing
 
-Skills live in `.skills/<name>/SKILL.md`. Match the user's intent to the right skill:
+Skills live in `.agents/skills/<name>/SKILL.md`. Match the user's intent to the right skill:
 
 | User says something like… | Skill |
 |---|---|
@@ -127,4 +128,4 @@ See `wiki-query` and `wiki-export` skills for how the filter is applied.
 
 ## Architecture Reference
 
-For the full pattern (three-layer architecture, page templates, project org), read `.skills/llm-wiki/SKILL.md`.
+For the full pattern (three-layer architecture, page templates, project org), read `.agents/skills/llm-wiki/SKILL.md`.

@@ -7,7 +7,7 @@ This project is a **skill-based framework** for building and maintaining an Obsi
 - **Purpose:** Build and maintain an Obsidian wiki using the LLM Wiki pattern (Andrej Karpathy).
 - **Tech Stack:** Markdown only. No code, no dependencies. The AI agent IS the runtime.
 - **Key Config:** `.env` contains `OBSIDIAN_VAULT_PATH` pointing to the vault location.
-- **Skills:** `.skills/` contains skill folders, each with a `SKILL.md` defining a workflow.
+- **Skills:** `.agents/skills/` contains skill folders, each with a `SKILL.md` defining a workflow.
 
 ## Key Concepts
 
@@ -21,20 +21,20 @@ This project is a **skill-based framework** for building and maintaining an Obsi
 
 | Skill | Folder | Purpose |
 |---|---|---|
-| Setup | `.skills/wiki-setup/` | Initialize vault structure |
-| Ingest | `.skills/wiki-ingest/` | Distill documents into wiki pages |
-| History Router | `.skills/wiki-history-ingest/` | Route `/wiki-history-ingest <claude|codex>` to the right history skill |
-| Claude History | `.skills/claude-history-ingest/` | Mine `~/.claude` conversations |
-| Codex History | `.skills/codex-history-ingest/` | Mine `~/.codex` sessions and rollout logs |
-| Data Ingest | `.skills/data-ingest/` | Process any text data |
-| Status | `.skills/wiki-status/` | Audit ingestion state and delta |
-| Query | `.skills/wiki-query/` | Answer questions from wiki |
-| Lint | `.skills/wiki-lint/` | Find broken links, orphans |
-| Rebuild | `.skills/wiki-rebuild/` | Archive and rebuild |
-| Cross-Linker | `.skills/cross-linker/` | Auto-discover and insert missing wikilinks |
-| Tag Taxonomy | `.skills/tag-taxonomy/` | Enforce consistent tag vocabulary |
-| LLM Wiki | `.skills/llm-wiki/` | Core architecture pattern |
-| Skill Creator | `.skills/skill-creator/` | Create new skills |
+| Setup | `.agents/skills/wiki-setup/` | Initialize vault structure |
+| Ingest | `.agents/skills/wiki-ingest/` | Distill documents into wiki pages |
+| History Router | `.agents/skills/wiki-history-ingest/` | Route `/wiki-history-ingest <claude|codex>` to the right history skill |
+| Claude History | `.agents/skills/claude-history-ingest/` | Mine `~/.claude` conversations |
+| Codex History | `.agents/skills/codex-history-ingest/` | Mine `~/.codex` sessions and rollout logs |
+| Data Ingest | `.agents/skills/data-ingest/` | Process any text data |
+| Status | `.agents/skills/wiki-status/` | Audit ingestion state and delta |
+| Query | `.agents/skills/wiki-query/` | Answer questions from wiki |
+| Lint | `.agents/skills/wiki-lint/` | Find broken links, orphans |
+| Rebuild | `.agents/skills/wiki-rebuild/` | Archive and rebuild |
+| Cross-Linker | `.agents/skills/cross-linker/` | Auto-discover and insert missing wikilinks |
+| Tag Taxonomy | `.agents/skills/tag-taxonomy/` | Enforce consistent tag vocabulary |
+| LLM Wiki | `.agents/skills/llm-wiki/` | Core architecture pattern |
+| Skill Creator | `.agents/skills/skill-creator/` | Create new skills |
 
 ## Coding Conventions
 

@@ -28,7 +28,7 @@ Open the project in your agent and say **"set up my wiki"**. That's it.
 
 Works with **any AI coding agent** that can read files — Claude Code, Cursor, Windsurf, Codex, Gemini CLI, Kiro, and more. Skills are plain markdown files; the agent reads them directly.
 
-When you open the obsidian-wiki repo in your agent, it picks up context from the bootstrap files (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, etc.) and discovers skills from `.skills/`. When you open your vault in Obsidian, skills are also available at `.agents/skills/` inside the vault.
+When you open the obsidian-wiki repo in your agent, it picks up context from the bootstrap files (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, etc.) and discovers skills from `.agents/skills/`. When you open your vault in Obsidian, skills are also available at `.agents/skills/` inside the vault.
 
 | Agent | Bootstrap File | How to invoke |
 |---|---|---|
@@ -46,10 +46,10 @@ When you open the obsidian-wiki repo in your agent, it picks up context from the
 | **[Factory Droid](https://factory.ai)** | `AGENTS.md` | Open repo |
 | **[Trae](https://trae.ai)** / **Trae CN** | `AGENTS.md` | Open repo |
 | **GitHub Copilot (VS Code)** | `.github/copilot-instructions.md` | Say "set up my wiki" in chat |
-| **GitHub Copilot (CLI)** | — | Copy `.skills/*` to `~/.copilot/skills/` manually |
+| **GitHub Copilot (CLI)** | — | Copy `.agents/skills/*` to `~/.copilot/skills/` manually |
 | **[Kilocode](https://kilo.ai/)** | `AGENTS.md` / `CLAUDE.md` | Open repo |
 
-> If your agent requires skills in a specific directory (e.g. `~/.claude/skills/`), copy or symlink from `.skills/` manually. `setup.sh` intentionally does not touch global agent paths.
+> If your agent requires skills in a specific directory (e.g. `~/.claude/skills/`), copy or symlink from `.agents/skills/` manually. `setup.sh` intentionally does not touch global agent paths.
 
 ## How it works
 
@@ -151,7 +151,7 @@ The directory is created automatically by `wiki-setup`. The path is configurable
 
 ## Skills
 
-Everything lives in `.skills/`. Each skill is a markdown file the agent reads when triggered:
+Everything lives in `.agents/skills/`. Each skill is a markdown file the agent reads when triggered:
 
 | Skill                   | What it does                                      | Slash Command            |
 | ----------------------- | ------------------------------------------------- | ------------------------ |
@@ -200,7 +200,7 @@ We handle the knowledge management workflow — ingest, query, lint, rebuild. Fo
 | `obsidian-cli` | Interact with a running Obsidian instance via CLI (search, create, manage notes) |
 | `defuddle` | Extract clean markdown from web pages — less noise than raw fetch, saves tokens during ingest |
 
-Both projects use the same [Agent Skills spec](https://agentskills.io/specification), so they coexist in the same `.skills/` directory with no conflicts.
+Both projects use the same [Agent Skills spec](https://agentskills.io/specification), so they coexist in the same `.agents/skills/` directory with no conflicts.
 
 **Install:**
 
@@ -214,7 +214,7 @@ After installing, your agent will automatically pick up the new skills alongside
 
 ```
 obsidian-wiki/                          # ← This repo
-├── .skills/                            # ← Canonical skill definitions (source of truth)
+├── .agents/skills/                     # ← Canonical skill definitions (source of truth)
 │   ├── wiki-setup/SKILL.md
 │   ├── wiki-ingest/SKILL.md
 │   ├── wiki-query/SKILL.md
@@ -237,7 +237,7 @@ obsidian-wiki/                          # ← This repo
 └── SETUP.md                            # Detailed setup guide
 
 your-vault/                             # ← Created by setup.sh
-├── .agents/skills/                     # ← Copied from .skills/ (self-contained)
+├── .agents/skills/                     # ← Copied from repo (self-contained)
 ├── .obsidian/                          # Obsidian config
 ├── concepts/                           # Global knowledge
 ├── entities/                           # People, tools, libraries
@@ -289,9 +289,9 @@ This is early. The skills work but there's a lot of room to make them smarter �
 
 ### Adding a new skill
 
-1. Create a folder in `.skills/your-skill-name/`
+1. Create a folder in `.agents/skills/your-skill-name/`
 2. Add a `SKILL.md` with YAML frontmatter (`name`, `description`) and markdown instructions
 3. Run `bash setup.sh` to copy the updated skills into your vault
 4. Test with your agent by saying something that matches the description
 
-See `.skills/skill-creator/SKILL.md` for the full guide on writing effective skills.
+See `.agents/skills/skill-creator/SKILL.md` for the full guide on writing effective skills.
