@@ -61,9 +61,29 @@ Process draft pages from the `_raw/` staging directory inside the vault. Use whe
 - The user says "process my drafts", "promote my raw pages", or drops files into `_raw/`
 - After a paste-heavy session where notes were captured quickly without structure
 
-In raw mode, each file in `OBSIDIAN_VAULT_PATH/_raw/` (or `OBSIDIAN_RAW_DIR`) is treated as a source. After promoting a file to a proper wiki page, **delete the original from `_raw/`**. Never leave promoted files in `_raw/` — they'll be double-processed on the next run.
+In raw mode, each file in `OBSIDIAN_VAULT_PATH/_raw/` (or `OBSIDIAN_RAW_DIR`) is treated as a source. After promoting a file to a proper wiki page, **delete the original from `_raw/`** — *but only if it is actually a draft*.
 
-**Deletion safety:** Only delete the specific file that was just promoted. Before deleting, verify the resolved path is inside `$OBSIDIAN_VAULT_PATH/_raw/` — never delete files outside this directory. Never use wildcards or recursive deletion (`rm -rf`, `rm *`). Delete one file at a time by its exact path.
+**CRITICAL: Distinguish drafts from preserved source documents.** Not everything in `_raw/` is a disposable draft. Converted lecture notes, exported markdown from PDFs/PPTs, and structured source materials placed in `_raw/` for organizational reasons must NOT be deleted.
+
+**When to DELETE (drafts):**
+- Single `.md` or `.txt` files dropped directly into `_raw/` or `_raw/<date>/`
+- Rough notes, quick captures, clipboard pastes, brainstorming dumps
+- Files the user explicitly calls "my drafts"
+
+**When to PRESERVE (source documents — DO NOT DELETE):**
+- Files named `output.md` (convention for PDF/PPT-to-markdown conversion output)
+- Any file that has a sibling `images/` directory containing extracted page images
+- Structured documents with clear headings, references, table of contents
+- Large files (>10KB) with organized content (lectures, papers, articles)
+- Files in `_raw/` subdirectories that represent document collections (e.g., `_raw/lectures/`, `_raw/papers/`)
+- If you are unsure whether something is a draft, **ask the user before deleting**
+
+**Deletion safety:**
+- Only delete the specific file that was just promoted
+- Before deleting, verify the resolved path is inside `$OBSIDIAN_VAULT_PATH/_raw/` — never delete files outside this directory
+- Never use wildcards or recursive deletion (`rm -rf`, `rm *`). Delete one file at a time by its exact path
+- **If the file matches any "preserve" criteria above, skip deletion entirely and continue to the next file**
+- If you skip deletion, note it in the log: `Preserved (not a draft): <path>`
 
 ## The Ingest Process
 

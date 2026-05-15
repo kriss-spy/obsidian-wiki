@@ -60,7 +60,7 @@ mkdir -p "$OBSIDIAN_VAULT_PATH"/{concepts,entities,skills,references,synthesis,j
 - `.obsidian/` — Obsidian's own config. Creates vault recognition.
 - `projects/` — Per-project knowledge (populated during ingest).
 - `_archives/` — Stores wiki snapshots for rebuild/restore operations.
-- `_raw/` — Staging area for unprocessed drafts. Drop rough notes here; `wiki-ingest` will promote them to proper wiki pages and delete the originals.
+- `_raw/` — Staging area for unprocessed drafts and converted source documents. Drop rough notes here; `wiki-ingest` will promote drafts to proper wiki pages and delete the originals. Structured source documents (converted PDFs, lecture notes, etc.) placed in `_raw/` subdirectories are preserved.
 
 ## Step 4: Create Special Files
 
